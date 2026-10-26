@@ -20,18 +20,21 @@ FROM debian:bookworm
 
 RUN apt-get update && apt-get install -y --no-install-recommends tzdata ca-certificates && rm -rf /var/lib/apt/lists/*
 
-RUN mkdir /CLIProxyAPI
+RUN mkdir -p /CLIProxyAPI /data
 
 COPY --from=builder ./app/CLIProxyAPI /CLIProxyAPI/CLIProxyAPI
 
 COPY config.example.yaml /CLIProxyAPI/config.example.yaml
+COPY render-entrypoint.sh /CLIProxyAPI/render-entrypoint.sh
+
+RUN chmod +x /CLIProxyAPI/render-entrypoint.sh
 
 WORKDIR /CLIProxyAPI
 
-EXPOSE 8317
+EXPOSE 10000
 
-ENV TZ=Asia/Shanghai
+ENV TZ=Asia/Ho_Chi_Minh
 
 RUN cp /usr/share/zoneinfo/${TZ} /etc/localtime && echo "${TZ}" > /etc/timezone
 
-CMD ["./CLIProxyAPI"]
+ENTRYPOINT ["/CLIProxyAPI/render-entrypoint.sh"]
