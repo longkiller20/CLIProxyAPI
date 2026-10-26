@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: cliproxyapi
+    runtime: docker
+    plan: starter
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: PORT
+        value: "10000"
+      - key: CPA_API_KEY
+        generateValue: true
+      - key: CPA_MANAGEMENT_SECRET
+        generateValue: true
+      - key: MANAGEMENT_PASSWORD
+        generateValue: true
+    disk:
+      name: cliproxyapi-data
+      mountPath: /data
+      sizeGB: 1
